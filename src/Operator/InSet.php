@@ -9,6 +9,8 @@
 
 namespace HelloFresh\FeatureToggle\Operator;
 
+use Collections\VectorInterface;
+
 /**
  * Operator that compare the given argument on equality based on a value.
  */
@@ -17,9 +19,9 @@ class InSet implements OperatorInterface
     private $values;
 
     /**
-     * @param array $values
+     * @param VectorInterface $values
      */
-    public function __construct(array $values)
+    public function __construct(VectorInterface $values)
     {
         $this->values = $values;
     }
@@ -30,11 +32,11 @@ class InSet implements OperatorInterface
     public function appliesTo($argument)
     {
         return null !== $argument
-        && in_array($argument, $this->values);
+        && in_array($argument, $this->values->toArray());
     }
 
     /**
-     * @return array
+     * @return VectorInterface
      */
     public function getValues()
     {
