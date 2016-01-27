@@ -1,5 +1,11 @@
 # Feature Toogle
 
+[![Build Status](https://travis-ci.org/hellofresh/feature-toggle.svg?style=flat-square)](https://travis-ci.org/hellofresh/feature-toggle)
+[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/hellofresh/feature-toggle.svg?style=flat-square)](https://scrutinizer-ci.com/g/hellofresh/feature-toggle/)
+[![Code Coverage](http://img.shields.io/scrutinizer/coverage/g/hellofresh/feature-toggle.svg?style=flat-square)](https://scrutinizer-ci.com/g/hellofresh/feature-toggle/)
+[![Latest Stable Version](http://img.shields.io/packagist/v/hellofresh/feature-toggle.svg?style=flat-square)](https://packagist.org/packages/hellofresh/feature-toggle)
+[![Downloads](https://img.shields.io/packagist/dt/hellofresh/feature-toggle.svg?style=flat-square)](https://packagist.org/packages/hellofresh/feature-toggle)
+
 A simple feature toggle mechanism for PHP.
 
 If you don't know the feature toggle pattern please read [this](http://martinfowler.com/bliki/FeatureToggle.html)
