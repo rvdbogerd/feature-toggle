@@ -1,0 +1,40 @@
+{
+  "name": "hellofresh/feature-toggle",
+  "description": "A simple feature toggle mechanism",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "feature",
+    "toggle",
+    "flags",
+    "switch"
+  ],
+  "homepage": "https://github.com/hellofresh/feature-toggle",
+  "authors": [
+    {
+      "name": "Ítalo Lelis de Vietro",
+      "email": "italolelis@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "easyframework/collections": "dev-master",
+    "symfony/yaml": "~3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "HelloFresh\\FeatureToggle\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\HelloFresh\\FeatureToggle\\": "tests/"
+    }
+  },
+  "config": {
+    "bin-dir": "bin"
+  }
+}
