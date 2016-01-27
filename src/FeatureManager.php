@@ -27,12 +27,7 @@ class FeatureManager
      */
     public function __construct(MapInterface $features = null)
     {
-        $this->features = new Dictionary();
-        if ($features) {
-            foreach ($features as $featureName => $feature) {
-                $this->addFeature(new Feature($featureName, $feature ? Toggle::on() : Toggle::off()));
-            }
-        }
+        $this->features = $features ? $features : new Dictionary();
     }
 
     public function addFeature(FeatureInterface $feature)
@@ -66,14 +61,14 @@ class FeatureManager
     public function get($name)
     {
         if (!$this->has($name)) {
-            throw new FeatureNotFoundException();
+            throw new FeatureNotFoundException(sprintf('The feature %s was not found', $name));
         }
 
         return $this->features->get($name);
     }
 
-    public function isActive($name)
+    public function isActive($name, Context $context)
     {
-        return $this->get($name)->isEnabled();
+        return $this->get($name)->activeFor($context);
     }
 }

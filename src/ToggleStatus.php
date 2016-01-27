@@ -9,16 +9,9 @@
 
 namespace HelloFresh\FeatureToggle;
 
-use Collections\Dictionary;
-use Symfony\Component\Yaml\Yaml;
-
-/**
- * Feature class.
- */
-class FeatureLoader
+final class ToggleStatus
 {
-    public static function fromYaml($yaml)
-    {
-        return new Dictionary(Yaml::parse($yaml));
-    }
+    const CONDITIONALLY_ACTIVE = 1;
+    const ALWAYS_ACTIVE = 2;
+    const INACTIVE = 4;
 }

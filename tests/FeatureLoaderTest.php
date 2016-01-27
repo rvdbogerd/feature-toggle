@@ -9,23 +9,43 @@
 
 namespace Tests\HelloFresh\FeatureToggle;
 
-use HelloFresh\FeatureToggle\FeatureLoader;
+use HelloFresh\FeatureToggle\Context;
 use HelloFresh\FeatureToggle\FeatureManager;
+use HelloFresh\FeatureToggle\Serializer\Serializer;
+use Symfony\Component\Yaml\Yaml;
 
 class FeatureLoaderTest extends \PHPUnit_Framework_TestCase
 {
     public function testLoadFromYaml()
     {
         $yaml = <<<YML
-feature_1: true
-feature_2: false
-feature_3: true
-feature_4: false
+features:
+  - name: some-feature
+    conditions:
+     - name: operator-condition
+       key: user_id
+       operator:
+           name: greater-than
+           value: 41
+       status: conditionally-active
+  - name: some-feature2
+    conditions:
+     - name: operator-condition
+       key: user_id
+       operator:
+           name: greater-than
+           value: 42
+       status: conditionally-active
 YML;
 
-        $features = FeatureLoader::fromYaml($yaml);
+        $serializer = new Serializer();
+
+        $features = $serializer->deserialize(Yaml::parse($yaml)['features']);
         $manager = new FeatureManager($features);
 
-        $this->assertTrue($manager->isActive('feature_1'));
+        $context = new Context();
+        $context->set('user_id', 42);
+
+        $this->assertTrue($manager->isActive('some-feature', $context));
     }
 }
