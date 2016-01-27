@@ -16,7 +16,6 @@ use HelloFresh\FeatureToggle\FeatureInterface;
 use HelloFresh\FeatureToggle\FeatureManager;
 use HelloFresh\FeatureToggle\Operator\LessThan;
 use HelloFresh\FeatureToggle\OperatorCondition;
-use HelloFresh\FeatureToggle\Toggle;
 
 class FeatureManagerTest extends \PHPUnit_Framework_TestCase
 {

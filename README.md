@@ -16,18 +16,27 @@ Let's define a new feature toggle list
 
 ```php
   use HelloFresh\FeatureToggle\FeatureManager;
-  use HelloFresh\FeatureToggle\Toggle;
   use HelloFresh\FeatureToggle\Feature;
+  use HelloFresh\FeatureToggle\OperatorCondition;
+  use HelloFresh\FeatureToggle\Context;
+  use Collections\ArrayList;
   
+  $operator = new LessThan(42);
+  $conditions = new ArrayList([new OperatorCondition('user_id', $operator)]);
+
   $manager = new FeatureManager();
   $manager
-    ->addFeature(new Feature('feature_1', Toggle:on()))
-    ->addFeature(new Feature('feature_2', Toggle:off()))
-    ->addFeature(new Feature('feature_3', Toggle:on()))
-    ->addFeature(new Feature('feature_4', Toggle:off()))
-    ;
-  
-  if ($manager->isActive('feature_2')) {
+      ->addFeature(new Feature('feature1', $conditions))
+      ->addFeature(new Feature('feature2', $conditions))
+      ->addFeature(new Feature('feature3', $conditions))
+      ->addFeature(new Feature('feature4', $conditions))
+  ;
+
+  $context = new Context([
+      'user_id' => 42
+  ]);
+          
+  if ($manager->isActive('feature2', $context)) {
        // The feature is active \o/ 
   }
 ```
@@ -35,20 +44,74 @@ Let's define a new feature toggle list
 Loading features from yaml files
 
 ```php
+    use HelloFresh\FeatureToggle\Context;
     use HelloFresh\FeatureToggle\FeatureManager;
-    use HelloFresh\FeatureToggle\FeatureLoader;
+    use HelloFresh\FeatureToggle\Serializer\Serializer;
+    use Symfony\Component\Yaml\Yaml;
   
     $yaml = <<<YML
-    feature_1: true
-    feature_2: false
-    feature_3: true
-    feature_4: false
-    YML;
-    
-    $features = FeatureLoader::fromYaml($yaml);
+features:
+  - name: some-feature
+    conditions:
+     - name: operator-condition
+       key: user_id
+       operator:
+           name: greater-than
+           value: 41
+       status: conditionally-active
+  - name: some-feature2
+    conditions:
+     - name: operator-condition
+       key: user_id
+       operator:
+           name: greater-than
+           value: 42
+       status: conditionally-active
+YML;
+
+    $serializer = new Serializer();
+
+    $features = $serializer->deserialize(Yaml::parse($yaml)['features']);
     $manager = new FeatureManager($features);
-    
-    $this->assertTrue($manager->isActive('feature_1'));
+
+    $context = new Context();
+    $context->set('user_id', 42);
+
+    if ($manager->isActive('feature2', $context)) {
+           // The feature is active \o/ 
+    }
+```
+
+What about using an expression?
+
+```php
+use HelloFresh\FeatureToggle\FeatureManager;
+use HelloFresh\FeatureToggle\Feature;
+use HelloFresh\FeatureToggle\ExpressionCondition;
+use HelloFresh\FeatureToggle\Context;
+use Collections\ArrayList;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+
+$language   = new ExpressionLanguage();
+$expression = new ExpressionCondition('user["active"] and product["price"] / 100 >= 0.2', $language);
+
+$manager = new FeatureManager();
+$manager->addFeature(new Feature('feature1', $expression));
+
+// Create and check a new context and condition using symfony expression
+$context = new Context();
+$context->set('user', [
+    'active' => true
+]);
+
+$context->set('product', [
+    'price' => 30
+]);
+      
+if ($manager->isActive('feature2', $context)) {
+   // The feature is active \o/ 
+}
+
 ```
 ## Contributing
 
